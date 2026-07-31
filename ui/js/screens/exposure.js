@@ -38,12 +38,15 @@ NF.screens.exposure = (function () {
   /** הדו"ח המזויף לנטפרי — עם הנימוק שהמשתמש עצמו כתב. */
   async function report() {
     const fakeIp = "172." + rand(16, 31) + "." + rand(0, 255) + "." + rand(1, 254);
+    // הכתובת מבודדת כ-LTR — אחרת היא נשברת בסדר לא צפוי בתוך פסקה עברית
     const reportText =
       "המשתמש בכתובת " +
       fakeIp +
       " ניסה לעקוף את הסינון ולגשת לכתובת:\n" +
+      '<span class="ltr">' +
       esc(NF.state.url) +
-      "\n\nבנימוק שהוזן למערכת:\n" +
+      "</span>\n" +
+      "בנימוק שהוזן למערכת:\n" +
       '"' +
       esc(NF.state.reason) +
       '"';

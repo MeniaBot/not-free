@@ -2,7 +2,21 @@
 NF.screens.hacking = (function () {
   const { render, $, sleep, esc } = NF.util;
 
+  const PROMPT = "> ";
   const URL_LINE = "> Requesting content: ";
+
+  /** שורת לוג אחת.
+   *  ה-">" נשאר מחוץ לבידוד כדי שיישאר בשמאל כמו בטרמינל אמיתי, והתוכן
+   *  נעטף ב-bdi כדי שעברית מעורבת באנגלית תקרא בסדר הנכון. */
+  function lineHtml(text, tailHtml) {
+    const rest = text.startsWith(PROMPT) ? text.slice(PROMPT.length) : text;
+    return (
+      '<span class="p">&gt; </span><bdi>' +
+      esc(rest) +
+      (tailHtml || "") +
+      "</bdi>\n"
+    );
+  }
 
   const LOG_LINES = [
     "> Initializing NetFree-Slayer V0.3...",
@@ -64,14 +78,12 @@ NF.screens.hacking = (function () {
     const out = $("#out");
     for (const line of LOG_LINES) {
       if (line === URL_LINE) {
-        out.insertAdjacentHTML(
-          "beforeend",
-          esc(line) + '<span class="url">' + esc(NF.state.url) + "</span>\n"
-        );
+        const url = '<span class="url">' + esc(NF.state.url) + "</span>";
+        out.insertAdjacentHTML("beforeend", lineHtml(line, url));
         out.scrollTop = out.scrollHeight;
         await sleep(2.5); // עיכוב ארוך יותר לקישור
       } else {
-        out.insertAdjacentHTML("beforeend", esc(line) + "\n");
+        out.insertAdjacentHTML("beforeend", lineHtml(line));
         out.scrollTop = out.scrollHeight;
         await sleep(0.2 + Math.random() * 1.6); // קצב הופעה לא אחיד
       }

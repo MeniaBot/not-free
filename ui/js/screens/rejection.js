@@ -54,7 +54,8 @@ NF.screens.rejection = (function () {
         '<h1 id="burn" style="color:var(--fire);max-width:460px;margin-top:20px">' +
         BURNING_LINE +
         "</h1>" +
-        '<p id="src" style="color:#000;font-weight:700;font-size:15px;opacity:0">' +
+        // במקור הצבע היה שחור על רקע שחור והמקור לא נראה בכלל
+        '<p id="src" style="color:rgba(255,255,255,.62);font-weight:700;font-size:15px;opacity:0">' +
         BURNING_SOURCE +
         "</p>",
       { dark: true }

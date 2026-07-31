@@ -47,22 +47,42 @@ body {
   -webkit-user-select: none;
 }
 
+/* חלון של תוכנה, לא דף אינטרנט: בלי גרירת תמונות ובלי סימון בטעות */
+img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
 /* המסך: עמודה ממורכזת שגוללת רק כשחייבים */
 #app {
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin;
+}
+
+/* סרגל גלילה דק ודיסקרטי — ברירת המחדל של Chromium נראית כמו דפדפן */
+#app::-webkit-scrollbar {
+  width: 8px;
+}
+#app::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.35);
+  border-radius: 99px;
+}
+#app::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.55);
+}
+#app::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .screen {
   min-height: 100%;
-  padding: 22px;
+  padding: 16px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--gap);
+  gap: 10px;
   text-align: center;
 }
 

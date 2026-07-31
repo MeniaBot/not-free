@@ -101,16 +101,17 @@
 }
 
 /* --- שדות --- */
+/* רוחב אחיד לכל השדות בכל המסכים — אחרת הקצוות יוצאים משוננים */
 .field {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   text-align: right;
 }
 .field label {
   display: block;
   font-size: 12px;
   color: var(--muted);
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 .field select,
 .field input,
@@ -121,11 +122,22 @@
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 12px 14px;
+  padding: 11px 14px;
   color: var(--ink);
   outline: none;
   user-select: text;
   -webkit-user-select: text;
+}
+
+/* שדה הקישור וכפתור ההדבקה לצדו — השדה נמתח, הכפתור בגודל קבוע */
+.paste-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.paste-row input {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 .field textarea {
   resize: none;
@@ -144,7 +156,7 @@
   display: flex;
   align-items: flex-start;
   gap: 9px;
-  max-width: 400px;
+  max-width: 420px;
   text-align: right;
   font-size: 13px;
   line-height: 1.5;
@@ -237,11 +249,24 @@
   font-size: 12px;
   line-height: 1.65;
   white-space: pre-wrap;
-  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+/* התו ">" נשאר LTR בשמאל, ותוכן השורה מבודד ב-bdi כדי שעברית מעורבת
+   באנגלית לא תתהפך */
+.terminal .out bdi {
+  unicode-bidi: isolate;
 }
 .terminal .out .url {
   color: var(--term-url);
   font-weight: 700;
+  direction: ltr;
+}
+.terminal .out::-webkit-scrollbar {
+  width: 8px;
+}
+.terminal .out::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 99px;
 }
 /* --- כרטיס הדו"ח --- */
 .report-head {
@@ -260,7 +285,15 @@
   font-size: 14px;
   line-height: 1.7;
   white-space: pre-line;
-  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+/* כתובת היא LTR — בתוך פסקה עברית היא חייבת בידוד ויישור משלה */
+.report-body .ltr {
+  display: block;
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+  font-size: 13px;
 }
 hr.sep {
   border: 0;
@@ -273,7 +306,10 @@ hr.sep {
   position: fixed;
   left: 50%;
   bottom: 18px;
-  transform: translate(-50%, 120%);
+  /* ההזזה נמדדת ביחידות קבועות ולא באחוזים — 120% מגובה טוסט נמוך לא הספיק
+     כדי להסתיר אותו, והוא הציץ בתחתית כל מסך. */
+  transform: translate(-50%, 160px);
+  opacity: 0;
   background: var(--danger);
   color: #fff;
   font-size: 15px;
@@ -282,12 +318,23 @@ hr.sep {
   box-shadow: var(--shadow);
   max-width: calc(100% - 36px);
   text-align: center;
-  transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.2s ease;
   z-index: 10;
   pointer-events: none;
 }
 #toast.on {
   transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+/* --- קרדיט --- */
+/* flex ולא טקסט רץ, כדי שסימן ה-© יישאר בתחילת המשפט מימין ולא יזלוג שמאלה */
+.credit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 /* --- קישור --- */

@@ -4,6 +4,8 @@
 פעולות שדפדפן לא יכול לעשות לבד — קריאת הלוח וסגירת התוכנה.
 """
 
+import webbrowser
+
 import webview
 
 from . import __version__, clipboard
@@ -30,12 +32,22 @@ class Api:
         except OSError:
             return {"ok": False, "text": ""}
 
+    def open_url(self, url):
+        """פותח קישור בדפדפן המערכת. רק http/https, ורק מה שהתוכנה עצמה מבקשת."""
+        if isinstance(url, str) and url.startswith(("http://", "https://")):
+            webbrowser.open(url)
+
     def close(self):
         if self._window is not None:
             self._window.destroy()
 
 
 def run():
+    # בלי הורדות ובלי תפריטי דפדפן — זו תוכנה, לא כרטיסייה
+    webview.settings["ALLOW_DOWNLOADS"] = False
+    webview.settings["SHOW_DEFAULT_MENUS"] = False
+    webview.settings["OPEN_EXTERNAL_LINKS_IN_BROWSER"] = True
+
     api = Api()
     window = webview.create_window(
         TITLE,

@@ -52,6 +52,16 @@ NF.util = (function () {
     if (bridge) await bridge.close();
   }
 
+  /** פותח קישור בדפדפן המערכת. window.open היה פותח חלון WebView בתוך התוכנה. */
+  async function openUrl(url) {
+    const bridge = api();
+    if (bridge) {
+      await bridge.open_url(url);
+    } else {
+      window.open(url, "_blank");
+    }
+  }
+
   /** מחזיר {ok, text}. ok=false כשהלוח לא נגיש. */
   async function readClipboard() {
     const bridge = api();
@@ -63,7 +73,46 @@ NF.util = (function () {
     }
   }
 
-  return { root, sleep, render, $, $$, esc, toast, typewriter, closeApp, readClipboard };
+  /* המנוע הוא דפדפן, אבל למשתמש זו תוכנה. חוסמים את מה שמסגיר את זה. */
+  function lockDownBrowserChrome() {
+    document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    // Ctrl+V/C/X/A נשארים פתוחים — בלעדיהם אי אפשר להדביק את הקישור
+    const BLOCKED_WITH_CTRL = ["r", "p", "f", "g", "s", "u", "j", "o", "+", "-", "=", "0"];
+    document.addEventListener("keydown", (e) => {
+      const key = e.key.toLowerCase();
+      const isFunctionKey = ["f3", "f5", "f7", "f12"].includes(key);
+      const isBlockedCombo = (e.ctrlKey || e.metaKey) && BLOCKED_WITH_CTRL.includes(key);
+      if (isFunctionKey || isBlockedCombo) e.preventDefault();
+    });
+
+    // Ctrl+גלגלת מזוויג את הממשק, והחלון לא ניתן לשינוי גודל
+    document.addEventListener(
+      "wheel",
+      (e) => {
+        if (e.ctrlKey) e.preventDefault();
+      },
+      { passive: false }
+    );
+
+    document.addEventListener("dragstart", (e) => e.preventDefault());
+  }
+
+  lockDownBrowserChrome();
+
+  return {
+    root,
+    sleep,
+    render,
+    $,
+    $$,
+    esc,
+    toast,
+    typewriter,
+    closeApp,
+    openUrl,
+    readClipboard,
+  };
 })();
 
 /** נתוני המשתמש שנאספים לאורך הזרימה. */

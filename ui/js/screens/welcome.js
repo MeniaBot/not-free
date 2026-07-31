@@ -33,11 +33,12 @@ NF.screens.welcome = (function () {
         "</div>" +
         "</div>" +
         '<button class="btn success rise-in" id="agree" style="min-width:260px;margin-top:6px">אני מסכים - המשך</button>' +
-        '<p class="caption rise-in">©️ נוצר על ידי <span class="link" id="credit">@בנימין-מחשבים</span> באתר מתמחים טופ</p>'
+        '<p class="caption credit rise-in"><span>©️</span><span>נוצר על ידי</span>' +
+        '<span class="link" id="credit">@בנימין-מחשבים</span><span>באתר מתמחים טופ</span></p>'
     );
 
     $("#agree").onclick = () => NF.screens.survey.show();
-    $("#credit").onclick = () => window.open(AUTHOR_URL, "_blank");
+    $("#credit").onclick = () => NF.util.openUrl(AUTHOR_URL);
   }
 
   return { show };

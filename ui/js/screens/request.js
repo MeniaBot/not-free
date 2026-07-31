@@ -31,20 +31,22 @@ NF.screens.request = (function () {
   async function show() {
     render(
       approvedBadge +
-        '<div class="field" style="margin-top:10px">' +
+        '<div class="field" style="margin-top:8px">' +
         '<label for="url">כאן מדביקים קישור לתוכן החסום</label>' +
-        '<div class="row" style="gap:4px">' +
-        '<input id="url" type="text" placeholder="ניתן להשתמש ב-Ctrl+V להדבקה" />' +
+        '<div class="paste-row">' +
+        // dir=auto: הרמז בעברית נשאר RTL, אבל ברגע שנכנסת כתובת השדה מתהפך
+        // ל-LTR ולא חותך את תחילת הכתובת
+        '<input id="url" type="text" dir="auto" placeholder="ניתן להשתמש ב-Ctrl+V להדבקה" />' +
         '<button class="icon-btn" id="paste" title="נסה להדביק מהלוח">' +
         icon("paste", 22) +
         "</button>" +
         "</div></div>" +
-        '<div class="field w-text" style="max-width:430px">' +
+        '<div class="field">' +
         '<label for="reason">נא לנמק מדוע התוכן צריך להיפתח (לניתוח ה-AI)</label>' +
-        '<textarea id="reason" rows="8" maxlength="1000" placeholder="' +
+        '<textarea id="reason" rows="7" maxlength="1000" placeholder="' +
         REASON_HINT +
         '"></textarea></div>' +
-        '<button class="btn warning wide" id="go" style="margin-top:6px">בצע פריצה באמצעות בינה מלאכותית</button>'
+        '<button class="btn warning" id="go" style="width:100%;max-width:420px;margin-top:4px">בצע פריצה באמצעות בינה מלאכותית</button>'
     );
 
     const url = $("#url");
