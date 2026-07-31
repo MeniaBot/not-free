@@ -55,4 +55,4 @@ build.bat
 
 ---
 
-נוצר על ידי [@בנימין-מחשבים](https://mitmachim.top/user/%D7%91%D7%A0%D7%99%D7%9E%D7%99%D7%9F-%D7%9E%D7%97%D7%A9%D7%91%D7%99%D7%9D)
+נוצר על ידי [@בני-הבוט](https://github.com/BeniaBot)
