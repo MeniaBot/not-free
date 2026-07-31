@@ -1,16 +1,16 @@
 # -*- mode: python ; coding: utf-8 -*-
-from PyInstaller.utils.hooks import collect_all
+from PyInstaller.utils.hooks import collect_all, collect_submodules
 
 datas = [('Netfree_logo.svg.png', '.'), ('GH.ico', '.')]
 binaries = []
-hiddenimports = []
+hiddenimports = collect_submodules('not_free')
 tmp_ret = collect_all('flet')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
 
 a = Analysis(
-    ['netfree_trap.py'],
-    pathex=[],
+    ['main.py'],
+    pathex=['.'],
     binaries=binaries,
     datas=datas,
     hiddenimports=hiddenimports,
@@ -29,7 +29,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='netfree_trap',
+    name='not-free',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

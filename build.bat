@@ -1,3 +1,3 @@
 @echo off
-py -m PyInstaller netfree_trap.spec --clean --noconfirm
+py -m PyInstaller not-free.spec --clean --noconfirm
 pause

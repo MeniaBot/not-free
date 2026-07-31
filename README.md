@@ -6,14 +6,20 @@
 
 ## הזרימה
 
+```
+welcome → survey → analysis → rejection | request → hacking → outcome → exposure
+```
+
 מסך פתיחה → שאלון (סטטוס / השקפה / צורך / עדה) → חישוב ניקוד → אישור או דחייה →
 הזנת קישור ונימוק → "פריצה" בטרמינל → כישלון → בחירה בין חזרה לסינון להמשך → החשיפה.
+
+כל מסך חושף `show(app)` ומייבא ישירות את המסך שאחריו — שרשרת חד-כיוונית בלי מעגלי ייבוא.
 
 ## הפעלה
 
 ```bash
 pip install -r requirements.txt
-python netfree_trap.py
+python main.py
 ```
 
 ## בנייה ל-EXE
@@ -26,10 +32,13 @@ build.bat
 
 | קובץ | תיאור |
 |---|---|
-| `netfree_trap.py` | כל האפליקציה |
-| `netfree_trap.spec` | ספק PyInstaller |
-| `GH.ico`, `Netfree_logo.svg.png` | נכסים מוטמעים ב-EXE |
-| `docs/תרחישים.xlsx` | טבלת משקלי הניקוד |
+| `main.py` | נקודת הכניסה |
+| `not_free/app.py` | מחלקת `App` — מצב, חלון ועזרים משותפים |
+| `not_free/scoring.py` | אפשרויות השאלון והמשקלים — מקור אמת יחיד |
+| `not_free/resources.py` | נתיבים לנכסים המוטמעים |
+| `not_free/screens/` | מסך לכל שלב בזרימה |
+| `not-free.spec` | ספק PyInstaller |
+| `docs/תרחישים.xlsx` | טבלת הניקוד (מסמך עיצוב) |
 | `docs/הוראות.txt` | מטלות ורעיונות להמשך |
 
 ---
