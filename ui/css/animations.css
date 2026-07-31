@@ -1,0 +1,197 @@
+/* אנימציות. כל אחת מקבילה לאנימציה שהייתה בגרסת flet. */
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* קפיצה פנימה — היה BOUNCE_OUT */
+@keyframes pop-in {
+  0% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(0.96);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.pop-in {
+  animation: pop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* קפיצה אלסטית — היה ELASTIC_OUT */
+@keyframes pop-elastic {
+  0% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  45% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+  65% {
+    transform: scale(0.9);
+  }
+  80% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.pop-elastic {
+  animation: pop-elastic 0.8s ease-out both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.fade-in {
+  animation: fade-in 0.5s ease-in both;
+}
+.fade-in-slow {
+  animation: fade-in 1s ease-in both;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise-in {
+  animation: rise-in 0.45s ease-out both;
+}
+
+/* רעידה — היה שינוי margin ידני */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(25px);
+  }
+  50% {
+    transform: translateX(-25px);
+  }
+}
+.shake {
+  animation: shake 0.12s linear 0s 8;
+}
+
+/* להבות */
+@keyframes burn-bg {
+  0%,
+  100% {
+    background: var(--danger-deep);
+  }
+  50% {
+    background: #000;
+  }
+}
+.burning {
+  animation: burn-bg 0.3s steps(1) 0s 8;
+}
+@keyframes burn-text {
+  0%,
+  100% {
+    color: #ffe600;
+  }
+  50% {
+    color: var(--danger);
+  }
+}
+@keyframes burn-icon {
+  0%,
+  100% {
+    color: #ffe600;
+  }
+  50% {
+    color: var(--fire);
+  }
+}
+.burning-text {
+  animation: burn-text 0.3s steps(1) 0s 8;
+}
+.burning-icon {
+  animation: burn-icon 0.3s steps(1) 0s 8;
+}
+
+/* הבהוב הסריקה */
+@keyframes scan-blink {
+  0%,
+  100% {
+    color: var(--danger);
+  }
+  50% {
+    color: var(--warning);
+  }
+}
+.scan-blink {
+  animation: scan-blink 0.7s steps(1) 0s 4;
+}
+
+/* סמן ההקלדה */
+.caret::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-inline-start: 2px;
+  background: currentColor;
+  vertical-align: -0.15em;
+  animation: caret-blink 1s steps(1) infinite;
+}
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* גלי המכ"ם */
+.radar {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  color: var(--warning);
+}
+.radar span {
+  position: absolute;
+  inset: 0;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  animation: ping 1.4s ease-out infinite;
+  opacity: 0;
+}
+.radar span:nth-child(2) {
+  animation-delay: 0.45s;
+}
+.radar span:nth-child(3) {
+  animation-delay: 0.9s;
+}
+@keyframes ping {
+  0% {
+    transform: scale(0.35);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}

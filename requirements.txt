@@ -1,1 +1,1 @@
-flet==0.28.3
+pywebview==6.2.1

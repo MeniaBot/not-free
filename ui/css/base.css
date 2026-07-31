@@ -1,0 +1,140 @@
+/* טוקנים, איפוס וטיפוגרפיה */
+
+:root {
+  --brand: #1d4ed8;
+  --brand-soft: #3b82f6;
+  --danger: #dc2626;
+  --danger-deep: #7f1d1d;
+  --success: #15803d;
+  --warning: #ea580c;
+  --fire: #f59e0b;
+
+  --ink: #0f172a;
+  --muted: #64748b;
+  --surface: #f1f5f9;
+  --card: #ffffff;
+  --line: #e2e8f0;
+
+  --term-bg: #0b1120;
+  --term-chrome: #111827;
+  --term-fg: #4ade80;
+  --term-url: #60a5fa;
+
+  --radius: 14px;
+  --gap: 12px;
+  --gap-lg: 24px;
+  --shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.16);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  direction: rtl;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* המסך: עמודה ממורכזת שגוללת רק כשחייבים */
+#app {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+}
+
+.screen {
+  min-height: 100%;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap);
+  text-align: center;
+}
+
+.screen.dark {
+  background: #000;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: 34px;
+}
+h2 {
+  font-size: 26px;
+}
+h3 {
+  font-size: 21px;
+}
+
+p {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.muted {
+  color: var(--muted);
+}
+.caption {
+  font-size: 12px;
+  color: var(--muted);
+}
+.danger {
+  color: var(--danger);
+}
+.danger-deep {
+  color: var(--danger-deep);
+}
+.success {
+  color: var(--success);
+}
+.warning {
+  color: var(--warning);
+}
+.brand {
+  color: var(--brand);
+}
+.italic {
+  font-style: italic;
+}
+.serif {
+  font-family: "Times New Roman", Georgia, serif;
+}
+.pre {
+  white-space: pre-line;
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap);
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.w-text {
+  max-width: 430px;
+}

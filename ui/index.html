@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <!-- חוסם כל יציאה לרשת. לא מגביל טעינת קבצים מקומיים, כי תחת file://
+         המקור הוא opaque ו-'self' לא היה מתאים לשום קובץ. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="connect-src 'none'; object-src 'none'; frame-src 'none'; form-action 'none'"
+    />
+    <title>NetFree Unlocker - AI Engine</title>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="toast"></div>
+
+    <script src="js/util.js"></script>
+    <script src="js/icons.js"></script>
+    <script src="js/scoring.js"></script>
+    <script src="js/screens/welcome.js"></script>
+    <script src="js/screens/survey.js"></script>
+    <script src="js/screens/analysis.js"></script>
+    <script src="js/screens/rejection.js"></script>
+    <script src="js/screens/request.js"></script>
+    <script src="js/screens/hacking.js"></script>
+    <script src="js/screens/outcome.js"></script>
+    <script src="js/screens/exposure.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
