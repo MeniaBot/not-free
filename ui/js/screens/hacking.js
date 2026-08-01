@@ -11,10 +11,10 @@ NF.screens.hacking = (function () {
   function lineHtml(text, tailHtml) {
     const rest = text.startsWith(PROMPT) ? text.slice(PROMPT.length) : text;
     return (
-      '<span class="p">&gt; </span><bdi>' +
+      '<span class="ln"><span class="p">&gt; </span><bdi>' +
       esc(rest) +
       (tailHtml || "") +
-      "</bdi>\n"
+      "</bdi>\n</span>"
     );
   }
 

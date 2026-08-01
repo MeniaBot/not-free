@@ -8,7 +8,7 @@ import webbrowser
 
 import webview
 
-from . import __version__, clipboard
+from . import __version__, clipboard, updater
 from .resources import ui_entry
 
 WINDOW_WIDTH = 560
@@ -37,12 +37,20 @@ class Api:
         if isinstance(url, str) and url.startswith(("http://", "https://")):
             webbrowser.open(url)
 
+    def update_info(self):
+        """{version, url} כשיש גרסה חדשה בגיטהאב, אחרת None.
+        הבדיקה עצמה רצה ברקע מאז ההפעלה — כאן רק קוראים את התוצאה."""
+        return updater.result()
+
     def close(self):
         if self._window is not None:
             self._window.destroy()
 
 
 def run():
+    # יוצא לדרך מיד וברקע, כדי שהחלון ייפתח באותה חצי שנייה כמו קודם
+    updater.start()
+
     # בלי הורדות ובלי תפריטי דפדפן — זו תוכנה, לא כרטיסייה
     webview.settings["ALLOW_DOWNLOADS"] = False
     webview.settings["SHOW_DEFAULT_MENUS"] = False

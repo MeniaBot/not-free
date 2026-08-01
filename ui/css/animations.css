@@ -1,9 +1,30 @@
-/* אנימציות. כל אחת מקבילה לאנימציה שהייתה בגרסת flet. */
+/* אנימציות. כל משך והאטה מגיעים מהטוקנים ב-base.css — אין כאן מספרים חופשיים. */
 
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* --- מעבר בין מסכים --- */
+/* לפני זה כל החלפת מסך הייתה חיתוך יבש: ה-innerHTML התחלף בבת אחת. */
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+}
+@keyframes screen-out {
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.985);
+  }
+}
+.screen {
+  animation: screen-in var(--dur-2) var(--ease-out) both;
+}
+.screen.leaving {
+  animation: screen-out var(--dur-2) var(--ease-out) both;
 }
 
 /* קפיצה פנימה — היה BOUNCE_OUT */
@@ -25,7 +46,7 @@
   }
 }
 .pop-in {
-  animation: pop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: pop-in var(--dur-4) var(--ease-spring) both;
 }
 
 /* קפיצה אלסטית — היה ELASTIC_OUT */
@@ -49,22 +70,17 @@
   }
 }
 .pop-elastic {
-  animation: pop-elastic 0.8s ease-out both;
+  animation: pop-elastic calc(var(--dur-4) + var(--dur-1)) var(--ease-out) both;
 }
 
 @keyframes fade-in {
   from {
     opacity: 0;
   }
-  to {
-    opacity: 1;
-  }
 }
+/* בלי השהיה מצטברת — משמש גם לחשיפה לפי דרישה, שם כל השהיה מרגישה כמו תקיעה */
 .fade-in {
-  animation: fade-in 0.5s ease-in both;
-}
-.fade-in-slow {
-  animation: fade-in 1s ease-in both;
+  animation: fade-in var(--dur-3) var(--ease-out) both;
 }
 
 @keyframes rise-in {
@@ -72,13 +88,11 @@
     opacity: 0;
     transform: translateY(10px);
   }
-  to {
-    opacity: 1;
-    transform: none;
-  }
 }
+/* ההשהיה מצטברת לפי מיקום האח — הכניסה נפרשת במקום שכל האלמנטים יזוזו יחד */
 .rise-in {
-  animation: rise-in 0.45s ease-out both;
+  animation: rise-in var(--dur-3) var(--ease-out) both;
+  animation-delay: calc(var(--d, 0) * var(--stagger));
 }
 
 /* רעידה — היה שינוי margin ידני */
@@ -92,10 +106,25 @@
   }
 }
 .shake {
-  animation: shake 0.12s linear 0s 8;
+  animation: shake var(--dur-flick) linear 0s var(--rep-flick);
+}
+/* הכיתוב מהבהב בקצב הרעידה. קודם זו הייתה לולאת JS נפרדת של 0.9 שנ' מול
+   0.96 שנ' של הרעידה, ושתיהן נסחפו זו מזו. עכשיו אותו משך ואותו מספר חזרות. */
+@keyframes warn-flicker {
+  0%,
+  100% {
+    color: #fff;
+  }
+  50% {
+    color: var(--danger);
+  }
+}
+.warn-flicker {
+  animation: warn-flicker var(--dur-flick) steps(1) 0s var(--rep-flick) forwards;
 }
 
-/* להבות */
+/* להבות — שלוש האנימציות באותו משך ובאותו מספר חזרות.
+   ה-JS ממתין ל-animationend ולא לשנייה שנרשמה ביד ויוצאת משורה בכל שינוי. */
 @keyframes burn-bg {
   0%,
   100% {
@@ -104,9 +133,6 @@
   50% {
     background: #000;
   }
-}
-.burning {
-  animation: burn-bg 0.3s steps(1) 0s 8;
 }
 @keyframes burn-text {
   0%,
@@ -126,11 +152,14 @@
     color: var(--fire);
   }
 }
+.burning {
+  animation: burn-bg var(--dur-burn) steps(1) 0s var(--rep-burn);
+}
 .burning-text {
-  animation: burn-text 0.3s steps(1) 0s 8;
+  animation: burn-text var(--dur-burn) steps(1) 0s var(--rep-burn);
 }
 .burning-icon {
-  animation: burn-icon 0.3s steps(1) 0s 8;
+  animation: burn-icon var(--dur-burn) steps(1) 0s var(--rep-burn);
 }
 
 /* הבהוב הסריקה */
@@ -145,6 +174,18 @@
 }
 .scan-blink {
   animation: scan-blink 0.7s steps(1) 0s 4;
+}
+
+/* עליית האש והכיתוב במסך השריפה — היה שלוש שורות transition שנכתבו ב-JS */
+@keyframes fire-rise {
+  from {
+    opacity: 0;
+    transform: scale(0.86);
+  }
+}
+.fire-rise {
+  animation: fire-rise var(--dur-4) var(--ease-out) both;
+  animation-delay: calc(var(--d, 0) * var(--stagger));
 }
 
 /* סמן ההקלדה */

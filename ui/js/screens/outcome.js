@@ -1,6 +1,6 @@
 /* מסך הכישלון והבחירה שאחריו. */
 NF.screens.outcome = (function () {
-  const { render, $, sleep, closeApp } = NF.util;
+  const { render, $, sleep, closeApp, appear } = NF.util;
   const { icon } = NF.icons;
 
   const FAILURE_BODY =
@@ -32,11 +32,12 @@ NF.screens.outcome = (function () {
         icon("celebration", 120) +
         "</div>" +
         '<h1 class="brand fade-in" style="margin-top:20px">עשית את הבחירה הנכונה!</h1>' +
-        '<p class="muted" id="sub" style="visibility:hidden">התוכנה נסגרת כעת...</p>'
+        // היה visibility:hidden שקפץ ל-visible בלי מעבר, ליד כותרת שדוהה
+        '<p class="muted pending" id="sub">התוכנה נסגרת כעת...</p>'
     );
 
     await sleep(1.1);
-    $("#sub").style.visibility = "visible";
+    appear($("#sub"));
     await sleep(3);
     await closeApp();
   }

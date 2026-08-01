@@ -1,6 +1,6 @@
 /* החשיפה — "עלינו עליך" ואחריה "עבדנו עליך". */
 NF.screens.exposure = (function () {
-  const { render, $, sleep, esc, typewriter, closeApp } = NF.util;
+  const { render, $, sleep, esc, typewriter, closeApp, appear, animationEnd } = NF.util;
   const { icon } = NF.icons;
 
   const EXPOSURE_BODY =
@@ -14,23 +14,19 @@ NF.screens.exposure = (function () {
 
   /** רעידת המסך שפותחת את רצף החשיפה. */
   async function show() {
+    // ההבהוב היה לולאת JS של 15×0.06 מול רעידת CSS של 8×0.12 — שני תזמונים
+    // לאותו אפקט, שנסחפו זה מזה. עכשיו שניהם אותה אנימציה ואותו מספר חזרות.
     render(
       '<div class="shake" style="display:flex;flex-direction:column;align-items:center;gap:8px">' +
         '<div class="danger">' +
         icon("shieldBad", 120) +
         "</div>" +
-        '<h3 class="danger" id="warn">זיהוי המשתמש הושלם</h3>' +
+        '<h3 class="danger warn-flicker" id="warn">זיהוי המשתמש הושלם</h3>' +
         "</div>",
       { dark: true }
     );
 
-    // הכיתוב מהבהב בקצב הרעידה
-    const warn = $("#warn");
-    for (let step = 0; step < 15; step++) {
-      warn.style.color = step % 2 === 0 ? "#fff" : "var(--danger)";
-      await sleep(0.06);
-    }
-
+    await animationEnd($("#warn"));
     await sleep(0.8);
     await report();
   }
@@ -71,11 +67,13 @@ NF.screens.exposure = (function () {
     );
 
     await sleep(3.5);
-    $("#ring").style.display = "none";
+    const ring = $("#ring");
+    ring.style.display = "none";
+    // החלפת הטקסט הייתה מיידית בזמן שכל השאר בתוכנה דוהה — עכשיו אותה דהייה
     const status = $("#status");
     status.textContent = 'הדו"ח נשלח בהצלחה ונקלט במערכת.';
-    status.classList.remove("caption");
-    status.classList.add("success", "caption");
+    status.classList.add("success");
+    appear(status);
     await sleep(1.5);
     await exposure();
   }
@@ -93,32 +91,32 @@ NF.screens.exposure = (function () {
   }
 
   async function reveal() {
+    // שלושת השלבים נחשפים דרך .pending + appear(). קודם אחד השתמש ב-opacity
+    // עם transition ידני, השני ב-visibility שקפץ בלי שום מעבר, והשלישי
+    // ב-transition שנרשם בתוך ה-HTML — שלוש דרכים לאותו דבר.
     render(
       '<div class="brand">' +
         icon("smiley", 80) +
         "</div>" +
         '<h1 class="brand pop-in">עבדנו עליך...</h1>' +
-        '<p class="w-text pre" id="punch" style="font-size:19px;opacity:0">😂😂😂\nבאמת חשבת שאפשר לעקוף סינון כל כך בקלות?</p>' +
-        '<div class="row" style="gap:0;visibility:hidden" id="typing">' +
+        '<p class="w-text pre pending" id="punch" style="font-size:19px">😂😂😂\nבאמת חשבת שאפשר לעקוף סינון כל כך בקלות?</p>' +
+        '<div class="row pending" style="gap:0" id="typing">' +
         '<span class="italic" id="typed" style="font-size:19px;color:var(--brand-soft)"></span>' +
         '<span style="font-size:19px"> 😉</span>' +
         "</div>" +
-        '<button class="btn" id="exit" style="min-width:280px;margin-top:16px;opacity:0;transition:opacity .5s ease-in">סגור וחשב מסלול מחדש</button>'
+        '<button class="btn pending" id="exit" style="min-width:280px;margin-top:16px">סגור וחשב מסלול מחדש</button>'
     );
 
-    const punch = $("#punch");
-    punch.style.transition = "opacity .5s ease-in";
-
     await sleep(0.8);
-    punch.style.opacity = "1";
+    appear($("#punch"));
     await sleep(1);
 
-    $("#typing").style.visibility = "visible";
+    appear($("#typing"));
     await typewriter($("#typed"), TYPED_LINE, 0.05);
 
     await sleep(0.3);
     const exit = $("#exit");
-    exit.style.opacity = "1";
+    appear(exit);
     exit.onclick = () => closeApp();
   }
 

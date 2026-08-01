@@ -1,6 +1,6 @@
 /* מסך הפתיחה. */
 NF.screens.welcome = (function () {
-  const { render, $ } = NF.util;
+  const { render, $, sleep, esc, appear, checkUpdate, openUrl } = NF.util;
   const { icon } = NF.icons;
 
   const AUTHOR_URL = "https://github.com/BeniaBot";
@@ -11,6 +11,31 @@ NF.screens.welcome = (function () {
     "כלי מתקדם מבוסס AI יסקור את בקשתך בכפוף לקריטריונים מחמירים.";
 
   const WARNING_LINE = "שימו לב! אין להעביר את התוכנה לאף גורם המקושר לנטפרי!!!";
+
+  // הבדיקה בפייתון עשויה לרוץ אחרי שהמסך כבר עלה, ולכן שואלים כמה פעמים
+  const UPDATE_TRIES = 12;
+  const UPDATE_GAP = 0.7;
+
+  /** מחכה שהבדיקה ברקע תסתיים, ואם יש גרסה חדשה — מציג את הפס.
+   *  לא ממתין לכלום: המסך פעיל כרגיל גם אם אין תשובה לעולם. */
+  async function watchForUpdate(slot) {
+    for (let i = 0; i < UPDATE_TRIES; i++) {
+      const info = await checkUpdate();
+      if (info) {
+        slot.innerHTML =
+          '<div class="strip update pending" id="update-strip">' +
+          "<span>גרסה חדשה זמינה — " +
+          esc(info.version) +
+          "</span>" +
+          '<span class="link" id="update-link">להורדה</span>' +
+          "</div>";
+        appear($("#update-strip"));
+        $("#update-link").onclick = () => openUrl(info.url);
+        return;
+      }
+      await sleep(UPDATE_GAP);
+    }
+  }
 
   async function show() {
     render(
@@ -31,12 +56,15 @@ NF.screens.welcome = (function () {
         "</div>" +
         "</div>" +
         '<button class="btn success rise-in" id="agree" style="min-width:260px;margin-top:6px">אני מסכים - המשך</button>' +
-        '<p class="caption credit rise-in"><span>©️</span><span>נוצר על ידי</span>' +
-        '<span class="link" id="credit">@בני-הבוט</span><span>בגיטהאב</span></p>'
+        '<p class="caption credit rise-in"><span>©️</span><span>פותח על ידי</span>' +
+        '<span class="link" id="credit">@בני-הבוט</span></p>' +
+        '<p class="caption terms rise-in">התוכנה מסופקת כמות שהיא, ללא אחריות מכל סוג</p>' +
+        '<div id="update-slot"></div>'
     );
 
     $("#agree").onclick = () => NF.screens.survey.show();
-    $("#credit").onclick = () => NF.util.openUrl(AUTHOR_URL);
+    $("#credit").onclick = () => openUrl(AUTHOR_URL);
+    watchForUpdate($("#update-slot"));
   }
 
   return { show };

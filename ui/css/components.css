@@ -99,6 +99,12 @@
   font-size: 15px;
   padding: 9px 16px;
 }
+/* פס העדכון — מופיע רק כשגיטהאב מדווח על גרסה חדשה */
+.strip.update {
+  background: rgba(29, 78, 216, 0.09);
+  color: var(--brand);
+  gap: 10px;
+}
 
 /* --- שדות --- */
 /* רוחב אחיד לכל השדות בכל המסכים — אחרת הקצוות יוצאים משוננים */
@@ -179,12 +185,16 @@
   background: var(--line);
   overflow: hidden;
 }
+/* מסך הניתוח מקדם את המד ב-101 קפיצות של 30ms. בלי המעבר הזה כל קפיצה
+   נראית, והמד מרגיש מדורג ליד מדים אחרים בתוכנה שרצים חלק. המעבר באורך
+   הצעד — התזמון הכולל לא משתנה, רק החיתוך בין הצעדים נעלם. */
 .bar > i {
   display: block;
   height: 100%;
   width: 0;
   border-radius: 99px;
   background: var(--brand);
+  transition: width 30ms linear;
 }
 .bar.danger > i {
   background: var(--danger);
@@ -255,6 +265,15 @@
    באנגלית לא תתהפך */
 .terminal .out bdi {
   unicode-bidi: isolate;
+}
+/* הסימן ">" עומעם — בטרמינל אמיתי הוא לא באותה בהירות כמו הפלט.
+   המחלקה הזו הופיעה ב-HTML מאז v0.9.1 בלי שהוגדרה כאן בכלל. */
+.terminal .out .p {
+  color: rgba(74, 222, 128, 0.55);
+}
+/* השורות הופיעו בחיתוך יבש; דהייה קצרה מרככת בלי לגעת בקצב ההופעה */
+.terminal .out .ln {
+  animation: fade-in var(--dur-1) linear both;
 }
 .terminal .out .url {
   color: var(--term-url);
@@ -335,6 +354,19 @@ hr.sep {
   align-items: center;
   justify-content: center;
   gap: 4px;
+}
+
+/* שורת התנאים — שקטה יותר מהקרדיט, לא מתחרה עליו */
+.terms {
+  font-size: 11px;
+  opacity: 0.72;
+  margin-top: -4px;
+}
+
+/* אלמנט שממתין לתורו ברצף. נחשף דרך NF.util.appear() בדהייה אחידה —
+   קודם זה נעשה עם visibility ו-opacity ישירות, וכל אחד קפץ אחרת. */
+.pending {
+  opacity: 0;
 }
 
 /* --- קישור --- */

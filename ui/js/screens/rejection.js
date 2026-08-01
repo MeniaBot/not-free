@@ -1,6 +1,6 @@
 /* מסך הדחייה, ומסך השריפה שאחריו. */
 NF.screens.rejection = (function () {
-  const { render, $, sleep, closeApp } = NF.util;
+  const { render, $, sleep, closeApp, animationEnd } = NF.util;
   const { icon } = NF.icons;
 
   const GENERIC_VERDICT =
@@ -47,42 +47,32 @@ NF.screens.rejection = (function () {
   }
 
   async function burning() {
-    render(
-      '<div id="fire" style="color:var(--fire)">' +
+    // האש, הכיתוב והמקור עולים ברצף אחד דרך .fire-rise במקום שלוש שורות
+    // transition שנכתבו ב-JS, כל אחת במשך אחר
+    const screen = render(
+      '<div id="fire" class="fire-rise" style="color:var(--fire)">' +
         icon("flame", 100) +
         "</div>" +
-        '<h1 id="burn" style="color:var(--fire);max-width:460px;margin-top:20px">' +
+        '<h1 id="burn" class="fire-rise" style="color:var(--fire);max-width:460px;margin-top:20px">' +
         BURNING_LINE +
         "</h1>" +
         // במקור הצבע היה שחור על רקע שחור והמקור לא נראה בכלל
-        '<p id="src" style="color:rgba(255,255,255,.62);font-weight:700;font-size:15px;opacity:0">' +
+        '<p id="src" class="fire-rise" style="color:rgba(255,255,255,.62);font-weight:700;font-size:15px">' +
         BURNING_SOURCE +
         "</p>",
       { dark: true }
     );
 
-    const screen = $(".screen");
     const fire = $("#fire");
     const burn = $("#burn");
-    const src = $("#src");
 
-    fire.style.opacity = "0";
-    burn.style.opacity = "0";
-    fire.style.transition = "opacity .8s ease-in";
-    burn.style.transition = "opacity 1s ease-in";
-    src.style.transition = "opacity 1.5s ease-in";
-
-    await sleep(0.5);
-    fire.style.opacity = "1";
-    burn.style.opacity = "1";
-    await sleep(0.5);
-    src.style.opacity = "1";
+    await sleep(1);
 
     // אפקט "להבות" — הבהוב מהיר של הרקע, האש והכיתוב
     screen.classList.add("burning");
     fire.classList.add("burning-icon");
     burn.classList.add("burning-text");
-    await sleep(2.4);
+    await animationEnd(screen);
 
     await sleep(3);
     await closeApp();

@@ -6,12 +6,38 @@ NF.util = (function () {
 
   const sleep = (seconds) => new Promise((r) => setTimeout(r, seconds * 1000));
 
-  /** מצייר מסך חדש במקום הקודם ומחזיר את האלמנט שלו. */
+  /** מצייר מסך חדש במקום הקודם ומחזיר את האלמנט שלו.
+   *  היוצא לא נמחק מיד — הוא יוצא מהזרימה ודוהה תוך כדי שהנכנס עולה, אחרת
+   *  כל מעבר הוא חיתוך יבש. שים לב שבמהלך המעבר יש שני `.screen` ב-DOM,
+   *  ולכן יש להשתמש בערך המוחזר ולא ב-$(".screen"). */
   function render(html, options) {
+    const app = root();
     const dark = options && options.dark;
-    root().innerHTML = '<div class="screen' + (dark ? " dark" : "") + '">' + html + "</div>";
-    root().scrollTop = 0;
-    return root().firstElementChild;
+    const leaving = app.firstElementChild;
+
+    if (leaving) {
+      leaving.classList.add("leaving");
+      // היוצא עדיין ב-DOM לרגע. בלי זה $("#fill") היה עלול לתפוס את שלו,
+      // כי הוא מקדים את הנכנס בסדר המסמך.
+      $$("[id]", leaving).forEach((node) => node.removeAttribute("id"));
+      // .leaving חוסם עכבר, אבל לא מקלדת: כפתור שנשארה עליו הפוקוס עדיין
+      // נענה ל-Enter, ולחיצה שנייה הייתה מפעילה את המסך הבא פעם נוספת.
+      $$("button, select, input, textarea", leaving).forEach((node) => (node.disabled = true));
+      // animationend מבעבע, ואנימציה של אלמנט־בן שמסתיימת באותו רגע הייתה
+      // מוחקת את המסך לפני שהספיק לדהות. מסננים לפי היעד.
+      leaving.addEventListener("animationend", function done(e) {
+        if (e.target !== leaving) return;
+        leaving.removeEventListener("animationend", done);
+        leaving.remove();
+      });
+    }
+
+    const el = document.createElement("div");
+    el.className = "screen" + (dark ? " dark" : "");
+    el.innerHTML = html;
+    app.appendChild(el);
+    app.scrollTop = 0;
+    return el;
   }
 
   const $ = (selector, scope) => (scope || document).querySelector(selector);
@@ -33,6 +59,24 @@ NF.util = (function () {
     el.classList.add("on");
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => el.classList.remove("on"), 4000);
+  }
+
+  /** חושף אלמנט שהמתין (.pending) — אותה דהייה לכל החשיפות בתוכנה. */
+  function appear(el) {
+    el.classList.remove("pending");
+    el.classList.add("fade-in");
+  }
+
+  /** ממתין לסיום האנימציה של האלמנט עצמו.
+   *  עדיף על sleep עם המספר שכתוב ב-CSS: אין שתי גרסאות של אותו תזמון. */
+  function animationEnd(el) {
+    return new Promise((resolve) => {
+      el.addEventListener("animationend", function done(e) {
+        if (e.target !== el) return; // animationend של אלמנט-בן מבעבע לכאן
+        el.removeEventListener("animationend", done);
+        resolve();
+      });
+    });
   }
 
   /** הקלדה תו-אחר-תו. */
@@ -59,6 +103,19 @@ NF.util = (function () {
       await bridge.open_url(url);
     } else {
       window.open(url, "_blank");
+    }
+  }
+
+  /** {version, url} כשגיטהאב מדווח על גרסה חדשה, אחרת null.
+   *  הבדיקה רצה בפייתון מאז ההפעלה; כאן רק שואלים אם כבר יש תשובה, ולכן
+   *  צריך לשאול כמה פעמים. בדפדפן בלי המארח — תמיד null. */
+  async function checkUpdate() {
+    const bridge = api();
+    if (!bridge) return null;
+    try {
+      return (await bridge.update_info()) || null;
+    } catch (e) {
+      return null;
     }
   }
 
@@ -108,9 +165,12 @@ NF.util = (function () {
     $$,
     esc,
     toast,
+    appear,
+    animationEnd,
     typewriter,
     closeApp,
     openUrl,
+    checkUpdate,
     readClipboard,
   };
 })();
