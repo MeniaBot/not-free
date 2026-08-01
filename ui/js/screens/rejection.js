@@ -28,7 +28,7 @@ NF.screens.rejection = (function () {
 
     if (customMsg) {
       slot.innerHTML =
-        '<div class="card fade-in">' +
+        '<div class="fade-in">' +
         '<p class="serif" style="font-size:26px;font-weight:700;line-height:1.4">"' +
         customMsg +
         '"</p>' +
@@ -38,9 +38,9 @@ NF.screens.rejection = (function () {
       $("#anyway").onclick = () => burning();
     } else {
       slot.innerHTML =
-        '<div class="card fade-in"><p class="pre">' +
+        '<div class="body-text pre fade-in">' +
         GENERIC_VERDICT +
-        "</p></div>" +
+        "</div>" +
         '<button class="btn neutral fade-in" id="quit" style="min-width:260px">יציאה מהתוכנה</button>';
       $("#quit").onclick = () => closeApp();
     }

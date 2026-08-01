@@ -40,21 +40,18 @@ NF.screens.welcome = (function () {
   async function show() {
     render(
       '<div class="badge-circle pop-in">' +
-        icon("lockOpen", 44) +
+        icon("lockOpen", 52) +
         "</div>" +
         '<h1 class="danger rise-in">בשורה למשתמשי נטפרי!</h1>' +
         '<p class="muted italic rise-in">הסוף לרודנות - פתיחת תכנים שנחסמו ללא סיבה</p>' +
-        '<div class="card right rise-in">' +
-        '<p class="pre">' +
+        // בלי כרטיס וכלי כרצועה כתומה. הטקסט נושם על הרקע, והאזהרה מודגשת
+        // בצבע ובמשקל במקום בקופסה משלה.
+        '<div class="body-text pre rise-in">' +
         PITCH +
-        "</p>" +
-        '<div class="strip warning" style="margin-top:16px">' +
-        icon("warning", 18) +
-        "<span>" +
+        "</div>" +
+        '<p class="warn-line rise-in">' +
         WARNING_LINE +
-        "</span>" +
-        "</div>" +
-        "</div>" +
+        "</p>" +
         '<button class="btn success rise-in" id="agree" style="min-width:260px;margin-top:6px">אני מסכים - המשך</button>' +
         '<p class="caption credit rise-in"><span>©️</span><span>פותח על ידי</span>' +
         '<span class="link" id="credit">@בני-הבוט</span></p>' +

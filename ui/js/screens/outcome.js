@@ -13,9 +13,9 @@ NF.screens.outcome = (function () {
         icon("errorCircle", 64) +
         "</div>" +
         '<h2 class="danger">- - - הפריצה נכשלה - - -</h2>' +
-        '<div class="card"><p class="pre">' +
+        '<div class="body-text pre">' +
         FAILURE_BODY +
-        "</p></div>" +
+        "</div>" +
         '<p class="caption" style="margin-top:8px">יש לבחור באחת האפשרויות:</p>' +
         '<button class="btn neutral wide" id="safe">חזרה לסינון נטפרי (סגור תוכנה)</button>' +
         '<button class="btn danger wide" id="risk">אני לוקח/ת סיכון! - המשך גלישה ללא סינון כלל</button>'
